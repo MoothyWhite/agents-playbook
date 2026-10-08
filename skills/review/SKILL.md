@@ -1,30 +1,43 @@
 ---
 name: review
 description: >
-  Code review focused exclusively on over-engineering. Finds what to delete:
-  reinvented standard library, unneeded dependencies, speculative abstractions,
-  dead flexibility. One line per finding: location, what to cut, what replaces
-  it. Use when the user says "review for over-engineering", "what can we
-  delete", "is this over-engineered", "simplify review", or invokes
-  /review. Complements correctness-focused review, this one only
-  hunts complexity.
+  Hunt over-engineering: reinvented standard library, unneeded dependencies,
+  speculative abstractions, dead flexibility. Two scopes — review the current
+  diff ("review for over-engineering", "what can we delete", "is this
+  over-engineered", /review), or audit the whole repo ("audit this codebase",
+  "what can I delete from this repo", "find bloat", /audit). One line per
+  finding: location, what to cut, what replaces it. Complements
+  correctness-focused review; this one only hunts complexity.
 ---
 
-Review diffs for unnecessary complexity. One line per finding: location, what
-to cut, what replaces it. The diff's best outcome is getting shorter.
+Find unnecessary complexity. One line per finding: location, what to cut, what
+replaces it. The best outcome is getting shorter.
+
+## Modes
+
+- **Diff mode** (default): review the current change. Output carries line numbers.
+- **Repo mode**: scan the whole tree instead of a diff. Output carries paths; rank findings biggest cut first.
 
 ## Format
 
-`L<line>: <tag> <what>. <replacement>.`, or `<file>:L<line>: ...` for
+Diff mode: `L<line>: <tag> <what>. <replacement>.`, or `<file>:L<line>: ...` for
 multi-file diffs.
 
-Tags:
+Repo mode: `<tag> <what to cut>. <replacement>. [path]`, one line per finding.
+
+## Tags
 
 - `delete:` dead code, unused flexibility, speculative feature. Replacement: nothing.
 - `stdlib:` hand-rolled thing the standard library ships. Name the function.
 - `native:` dependency or code doing what the platform already does. Name the feature.
 - `yagni:` abstraction with one implementation, config nobody sets, layer with one caller.
 - `shrink:` same logic, fewer lines. Show the shorter form.
+
+## Repo-mode hunt list
+
+Deps the stdlib or platform already ships, single-implementation interfaces,
+factories with one product, wrappers that only delegate, files exporting one
+thing, dead flags and config, hand-rolled stdlib.
 
 ## Examples
 
@@ -43,7 +56,8 @@ considered whether all these validation rules are needed at this stage?"
 
 ## Scoring
 
-End with the only metric that matters: `net: -<N> lines possible.`
+End with the only metric that matters: `net: -<N> lines possible.` (repo mode:
+`net: -<N> lines, -<M> deps possible.`).
 
 If there is nothing to cut, say `Lean already. Ship.` and stop.
 
@@ -53,4 +67,4 @@ Scope: over-engineering and complexity only. Correctness bugs, security holes,
 and performance are explicitly out of scope. Route them to a normal review
 pass, not this one. A single smoke test or `assert`-based
 self-check is the minimum, not bloat, never flag it for deletion.
-Does not apply the fixes, only lists them.
+Lists findings, applies nothing. One-shot.

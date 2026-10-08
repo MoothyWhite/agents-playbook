@@ -1,11 +1,3 @@
----
-name: ty
-description:
-  Guide for using ty, the extremely fast Python type checker and language
-  server. Use this when type checking Python code or setting up type checking in
-  Python projects.
----
-
 # ty
 
 ty is an extremely fast Python type checker and language server. It replaces
@@ -17,14 +9,6 @@ mypy, Pyright, and other type checkers.
 
 - `[tool.ty]` section in `pyproject.toml`
 - A `ty.toml` configuration file
-
-## How to invoke ty
-
-- `uv run ty ...` - Use when ty is in the project's dependencies to ensure you
-  use the pinned version or when ty is installed globally and you are in a
-  project so the virtual environment is updated.
-- `uvx ty ...` - Use when ty is not a project dependency, or for quick one-off
-  checks
 
 ## Commands
 

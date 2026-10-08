@@ -1,10 +1,3 @@
----
-name: ruff
-description:
-  Guide for using ruff, the extremely fast Python linter and formatter. Use this
-  when linting, formatting, or fixing Python code.
----
-
 # ruff
 
 Ruff is an extremely fast Python linter and code formatter. It replaces Flake8,
@@ -25,14 +18,6 @@ However, avoid making unnecessary changes:
 - **Scope fixes to code being edited** - Use `ruff check --diff` to see fixes
   relevant to the code you're changing. Only apply fixes to files you're
   modifying unless the user explicitly asks for broader fixes.
-
-## How to invoke ruff
-
-- `uv run ruff ...` - Use when ruff is in the project's dependencies to ensure
-  you use the pinned version
-- `uvx ruff ...` - Use when ruff is not a project dependency, or for quick
-  one-off checks
-- `ruff ...` - Use if ruff is installed globally
 
 ## Commands
 
